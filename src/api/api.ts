@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from '../services/auth';
+import { getToken, clearAuth } from '../services/auth';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080',
@@ -24,10 +24,20 @@ api.interceptors.response.use(
     (error) => {
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
             // console.warn('Unauthorized - maybe redirect to login?');
-            localStorage.removeItem('token');
-            localStorage.removeItem('role');
+            
+            // localStorage.removeItem('token');
+            // localStorage.removeItem('role');
+            clearAuth();
+            localStorage.removeItem('fullname');
             localStorage.setItem('sessionExpired', 'true');
 
+            // history.push('/login');
+            // window.location.reload();
+            // redirectToLogin();
+
+            // setTimeout(() => {
+            //     window.location.href= '/login';
+            // }, 100);
             window.location.href= '/login';
         }
         return Promise.reject(error);

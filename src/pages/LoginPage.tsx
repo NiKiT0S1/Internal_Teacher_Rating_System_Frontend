@@ -10,6 +10,7 @@ function LoginPage() {
         password: ''
     });
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('sessionExpired') === 'true') {
@@ -32,6 +33,7 @@ function LoginPage() {
             const {token, role} = response.data;
 
             saveToken(token, role);
+            localStorage.setItem('fullname', response.data.fullname);
 
             if (role === 'STUDENT') navigate ('/student/dashboard');
             else if (role === 'TEACHER') navigate ('/teacher/reviews');
@@ -91,7 +93,7 @@ function LoginPage() {
                             Password
                         </label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             id="password"
                             className="form-control"
@@ -100,6 +102,18 @@ function LoginPage() {
                             onChange={handleChange}
                             required
                         />
+                    </div>
+                    <div className="form-check mt-2">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="showPassword"
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                        />
+                        <label className="form-check-label" htmlFor="showPassword">
+                            Show password👁
+                        </label>
                     </div>
 
                     <button

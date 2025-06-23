@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// import {useEffect} from 'react';
+// import { isTokenExpired } from './services/auth';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -11,6 +13,17 @@ import ModeratorCriteriaPage from "./pages/Moderator/ModeratorCriteriaPage";
   
 
 function App() {
+
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (isTokenExpired()) {
+  //     localStorage.removeItem('token');
+  //     localStorage.removeItem('role');
+  //     navigate('/login');
+  //   }
+  // }, []);
+
   return (
     // <Router>
       <Routes>
@@ -24,7 +37,7 @@ function App() {
             <StudentDashboard />
           </PrivateRoute>
           } />
-        <Route path="/student/reviews" element={
+        <Route path="/student/reviews/:teacherId" element={
           <PrivateRoute allowedRoles={['STUDENT']}>
             <LeaveReviewPage />
           </PrivateRoute>

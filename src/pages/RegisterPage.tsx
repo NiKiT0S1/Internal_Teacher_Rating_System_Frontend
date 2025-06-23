@@ -13,6 +13,7 @@ function RegisterPage() {
         department: '',
     });
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({
@@ -76,7 +77,7 @@ function RegisterPage() {
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             id="password"
                             className="form-control"
@@ -85,6 +86,18 @@ function RegisterPage() {
                             onChange={handleChange}
                             required
                         />
+                    </div>
+                    <div className="form-check mt-2">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="showPassword"
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                        />
+                        <label className="form-check-label" htmlFor="showPassword">
+                            Show password👁
+                        </label>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
