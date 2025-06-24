@@ -51,6 +51,7 @@ function RegisterPage() {
                 style={{
                     width: '100%',
                     maxWidth: '400px',
+                    margin: '50px',
                     borderRadius: '12px',
                     animation: 'fadeIn 0.5s ease-in-out',
                     backgroundColor: '#fff'
@@ -99,6 +100,7 @@ function RegisterPage() {
                             Show password👁
                         </label>
                     </div>
+                    <br />
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input
@@ -136,7 +138,7 @@ function RegisterPage() {
                     {form.role === 'TEACHER' && (
                         <div className="mb-3">
                             <label htmlFor="department" className="form-label">Department</label>
-                            <input
+                            {/* <input
                                 type="text"
                                 name="department"
                                 id="department"
@@ -145,7 +147,17 @@ function RegisterPage() {
                                 value={form.department}
                                 onChange={handleChange}
                                 required={form.role === 'TEACHER'}
-                            />
+                            /> */}
+                            <select name="department" id="department" className="form-select" value={form.department} onChange={handleChange} required>
+                                <option value="">Select Department</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Big Data Analysis">Big Data Analysis</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="Media Technologies">Media Technologies</option>
+                                <option value="Smart Technologies">Smart Technologies</option>
+                                <option value="Mathematical and Computational Science">Mathematical and Computational Science</option>
+                            </select>
                         </div>
                     )}
                     <button type="submit" className="btn btn-primary w-100" style={{ transition: 'background-color 0.3s ease' }}>Register</button>

@@ -36,7 +36,7 @@ function LoginPage() {
             localStorage.setItem('fullname', response.data.fullname);
 
             if (role === 'STUDENT') navigate ('/student/dashboard');
-            else if (role === 'TEACHER') navigate ('/teacher/reviews');
+            else if (role === 'TEACHER') navigate ('/teacher/averages');
             else if (role === 'MODERATOR') navigate ('/moderator/reviews');
         }
         catch (err) {
@@ -115,6 +115,7 @@ function LoginPage() {
                             Show password👁
                         </label>
                     </div>
+                    <br />
 
                     <button
                         type="submit"
