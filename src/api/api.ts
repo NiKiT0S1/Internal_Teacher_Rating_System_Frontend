@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getToken, clearAuth } from '../services/auth';
+import { redirectToLogin } from '../utils/redirect';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080',
@@ -38,7 +39,8 @@ api.interceptors.response.use(
             // setTimeout(() => {
             //     window.location.href= '/login';
             // }, 100);
-            window.location.href= '/login';
+            // window.location.href= '/login';
+            redirectToLogin();
         }
         return Promise.reject(error);
     }

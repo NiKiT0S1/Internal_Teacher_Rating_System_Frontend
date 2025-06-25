@@ -13,7 +13,12 @@ function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        if (localStorage.getItem('sessionExpired') === 'true') {
+        const expired = localStorage.getItem('sessionExpired');
+        // if (localStorage.getItem('sessionExpired') === 'true') {
+        //     setError('Session expired. Please login again.');
+        //     localStorage.removeItem('sessionExpired');
+        // }
+        if (expired === 'true') {
             setError('Session expired. Please login again.');
             localStorage.removeItem('sessionExpired');
         }
@@ -28,6 +33,7 @@ function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
         try {
             const response = await api.post('/auth/login', form);
             const {token, role} = response.data;
@@ -37,10 +43,15 @@ function LoginPage() {
 
             if (role === 'STUDENT') navigate ('/student/dashboard');
             else if (role === 'TEACHER') navigate ('/teacher/averages');
-            else if (role === 'MODERATOR') navigate ('/moderator/reviews');
+            else if (role === 'MODERATOR') navigate ('/moderation/reviews');
         }
-        catch (err) {
-            setError('Invalid username or password');
+        catch (err: any) {
+            if (err.response && err.response.status === 403) {
+                setError('Invalid username or password');
+            }
+            else {
+                setError('Something went wrong. Please try again.');
+            }
         }
     };
 

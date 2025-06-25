@@ -56,12 +56,12 @@ function App() {
           } />
 
         {/* MODERATOR Page */}
-        <Route path="/moderator/reviews" element={
+        <Route path="/moderation/reviews" element={
           <PrivateRoute allowedRoles={['MODERATOR']}>
             <ModeratorReviewsPage />
           </PrivateRoute>
           } />
-        <Route path="/moderator/criteria" element={
+        <Route path="/moderation/criteria" element={
           <PrivateRoute allowedRoles={['MODERATOR']}>
             <ModeratorCriteriaPage />
           </PrivateRoute>
