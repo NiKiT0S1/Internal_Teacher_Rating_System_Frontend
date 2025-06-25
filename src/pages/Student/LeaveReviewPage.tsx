@@ -1,13 +1,20 @@
+/**
+ * Назначение: Создание отзыва о преподавателе
+ */
+
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom"
 import api from "../../api/api";
 
+// Интерфейс для критериев оценки. Является структурой для отображения списка критериев
 interface Criteria {
     id: string;
     name: string;
 }
 
+// Функция для создания отзыва о преподавателе
 function LeaveReviewPage() {
+    // Получение ID преподавателя из URL
     const {teacherId} = useParams<{teacherId: string}>();
     const navigate = useNavigate();
     const [criteria, setCriteria] = useState<Criteria[]>([]);
@@ -17,7 +24,9 @@ function LeaveReviewPage() {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
+    // Загрузка критериев оценки при монтировании компонента
     useEffect(() => {
+        // Используется для получения списка критериев оценки
         const fetchCriteria = async () => {
             try {
                 const response = await api.get('/reviews/criteria');
@@ -31,18 +40,22 @@ function LeaveReviewPage() {
         fetchCriteria();
     }, []);
 
+    // Обработка изменения значения оценки
     const handleScoreChange = (criteriaId: string, value: number) => {
         setScores({...scores, [criteriaId]: value});
     };
 
+    // Обработка отправки формы
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Проверка валидности формы
         if (Object.keys(scores).length !== criteria.length) {
             setError('Please rate all criteria.');
             return;
         }
 
+        // Отправка данных на сервер
         try {
             await api.post('/reviews', {
                 teacherId,
@@ -54,6 +67,7 @@ function LeaveReviewPage() {
             setMessage('Review submitted successfully!');
             setTimeout(() => navigate('/student/dashboard'), 1500);
         }
+        // Обработка ошибок
         catch (err: any) {
             if (err.response && err.response.status === 409) {
                 setError('You have already submitted a review for this teacher this semester.');
@@ -67,6 +81,7 @@ function LeaveReviewPage() {
         }
     };
 
+    // Отображение страницы
     return (
         <div
             style={{

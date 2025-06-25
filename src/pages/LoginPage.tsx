@@ -1,10 +1,17 @@
+/**
+ * Назначение: Аутентификация пользователей
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { saveToken } from '../services/auth';
 
+// Компонент LoginPage представляет страницу для аутентификации пользователей
 function LoginPage() {
+    // Используется для навигации между страницами
     const navigate = useNavigate();
+    // Используется для управления состоянием компонента
     const [form, setForm] = useState({
         username: '',
         password: ''
@@ -12,6 +19,7 @@ function LoginPage() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    // Проверка на истечение сессии
     useEffect(() => {
         const expired = localStorage.getItem('sessionExpired');
         // if (localStorage.getItem('sessionExpired') === 'true') {
@@ -24,6 +32,7 @@ function LoginPage() {
         }
     }, []);
 
+    // Обработка изменения полей формы
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({
             ...form,
@@ -31,20 +40,25 @@ function LoginPage() {
         });
     };
 
+    // Обработка отправки формы
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        // Отправка данных на сервер
         try {
             const response = await api.post('/auth/login', form);
             const {token, role} = response.data;
 
+            // Сохранение данных авторизации в localStorage
             saveToken(token, role);
             localStorage.setItem('fullname', response.data.fullname);
 
+            // Редирект в зависимости от роли
             if (role === 'STUDENT') navigate ('/student/dashboard');
             else if (role === 'TEACHER') navigate ('/teacher/averages');
             else if (role === 'MODERATOR') navigate ('/moderation/reviews');
         }
+        // Обработка ошибок
         catch (err: any) {
             if (err.response && err.response.status === 403) {
                 setError('Invalid username or password');
@@ -55,6 +69,7 @@ function LoginPage() {
         }
     };
 
+    // Рендер страницы
     return (
         <div
             style={{

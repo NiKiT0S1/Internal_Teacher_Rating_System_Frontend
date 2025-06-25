@@ -1,7 +1,12 @@
+/**
+ * Назначение: Создание новых пользователей
+ */
+
 import { use, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
+// Компонент RegisterPage представляет страницу для регистрации новых пользователей
 function RegisterPage() {
     const navigate = useNavigate();
     const [form, setForm] = useState({
@@ -15,6 +20,7 @@ function RegisterPage() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    // Обработка изменения полей формы
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({
             ...form,
@@ -22,8 +28,10 @@ function RegisterPage() {
         });
     };
 
+    // Обработка отправки формы
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Проверка валидности формы
         if (form.role === 'TEACHER' && !form.department.trim()) {
             setError('Department is required for teachers');
             return;
@@ -37,6 +45,7 @@ function RegisterPage() {
         }
     };
 
+    // Отображение страницы
     return (
         <div style={{
                 minHeight: '100vh',

@@ -1,14 +1,21 @@
+/**
+ * Назначение: Показывает средние баллы по критериям в виде графика.
+ * Использует библиотеку recharts для создания столбчатой диаграммы
+ */
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import { clearAuth } from "../../services/auth";
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
+// Интерфейс для средних баллов. Является структурой для отображения списка средних баллов
 interface AverageScore {
     criteriaName: string;
     averageScore: number;
 }
 
+// Компонент TeacherAveragesPage.
 function TeacherAveragesPage() {
     const navigate = useNavigate();
     const [averages, setAverages] = useState<AverageScore[]>([]);
@@ -16,6 +23,7 @@ function TeacherAveragesPage() {
     const [error, setError] = useState('');
     // const [message, setMessage] = useState('');
 
+    // Загрузка средних баллов при монтировании компонента
     useEffect(() => {
         const fetchAverages = async () => {
             try {
@@ -35,6 +43,7 @@ function TeacherAveragesPage() {
         fetchAverages();
     }, []);
 
+    // Очищение данных авторизации
     const handleLogout = () => {
         clearAuth();
         localStorage.removeItem('fullname');
@@ -43,6 +52,7 @@ function TeacherAveragesPage() {
 
     const fullname = localStorage.getItem('fullname') || 'Teacher';
 
+    // Отображение страницы
     return (
         <div
             style={{
@@ -96,6 +106,8 @@ function TeacherAveragesPage() {
                     //     ))}
                     // </ul>
                     // style={{padding: '25px'}}
+                    
+                    // Компонент барной диаграммы
                     <ResponsiveContainer width="100%" height={400}>
                         <BarChart data={averages} margin={{top: 20, right: 30, left: 20, bottom: 5}}>
                             <CartesianGrid strokeDasharray="3 3" />

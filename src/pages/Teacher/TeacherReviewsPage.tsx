@@ -1,8 +1,13 @@
+/**
+ * Назначение: Показывает все отзывы с комментариями и детальными оценками
+ */
+
 import { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom';
 import api from "../../api/api";
 import { clearAuth } from "../../services/auth";
 
+// Интерфейс для отзывов. Является структурой для отображения списка отзывов
 interface Review {
     id: string;
     semester: string;
@@ -10,6 +15,7 @@ interface Review {
     comment: string;
 }
 
+// Компонент TeacherReviewPage. Используется для отображения списка отзывов
 function TeacherReviewPage() {
     const navigate = useNavigate();
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -17,6 +23,7 @@ function TeacherReviewPage() {
     const [error, setError] = useState('');
     // const [message, setMessage] = useState('');
 
+    // Загрузка отзывов при монтировании компонента
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -36,12 +43,14 @@ function TeacherReviewPage() {
         fetchReviews();
     }, []);
 
+    // Очищение данных авторизации
     const handleLogout = () => {
         clearAuth();
         localStorage.removeItem('fullname');
         navigate('/login');
     }
 
+    // Отображение страницы
     return (
         <div
             style={{

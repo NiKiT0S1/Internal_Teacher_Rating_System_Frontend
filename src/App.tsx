@@ -1,3 +1,8 @@
+/**
+ * Назначение: Настройка маршрутизации и защищенных роутов
+ */
+
+
 // import {useEffect} from 'react';
 // import { isTokenExpired } from './services/auth';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
@@ -26,6 +31,8 @@ function App() {
 
   return (
     // <Router>
+    
+    // Определяет все маршруты приложения с защитой по ролям
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />

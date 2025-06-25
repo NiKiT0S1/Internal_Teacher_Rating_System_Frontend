@@ -1,9 +1,13 @@
+/**
+ * Назначение: Управление видимостью отзывов (скрыть/показать)
+ */
+
 import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { clearAuth } from '../../services/auth';
 
-
+// Интерфейс для отзывов. Является структурой для отображения списка отзывов
 interface Review {
     id: string;
     semester: string;
@@ -14,7 +18,7 @@ interface Review {
     teacherUsername: string;
 }
 
-
+// Компонент ModeratorReviewsPage. Используется для отображения списка отзывов
 function ModeratorReviewsPage() {
     const navigate = useNavigate();
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -22,6 +26,7 @@ function ModeratorReviewsPage() {
     const [error, setError] = useState('');
 
 
+    // Загрузка отзывов при монтировании компонента
     const fetchReviews = async () => {
             try {
                 const response = await api.get('/moderation/reviews');
@@ -51,11 +56,15 @@ function ModeratorReviewsPage() {
         fetchReviews();
     }, []);
 
+    // Переключение видимости отзыва
     const handleToggleVisibility = async (id: string, hide: boolean) => {
         try {
+            // Тут будет запрос к бэкенду
             const endpoint = `/moderation/reviews/${id}/${hide ? 'hide': 'show'}`;
+            // После чего обновляем статус отзыва
             await api.patch(endpoint);
             // fetchReviews();
+            // И потом обновляем состояние
             setReviews((prev) => 
                 prev.map((review) =>
                     review.id === id ? {...review, hidden: hide} : review
@@ -69,12 +78,14 @@ function ModeratorReviewsPage() {
         }
     };
 
+    // Очищение данных авторизации
     const handleLogout = () => {
         clearAuth();
         localStorage.removeItem('fullname');
         navigate('/login');
     }
 
+    // Отображение страницы
     return (
         <div
         style={{

@@ -1,13 +1,19 @@
+/**
+ * Назначение: Добавление и удаление критериев оценивания
+ */
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import { clearAuth } from "../../services/auth";
 
+// Интерфейс для критериев оценки. Является структурой для отображения списка критериев
 interface Criteria {
     id: string;
     name: string;
 }
 
+// Компонент ModeratorCriteriaPage
 function ModeratorCriteriaPage() {
     const navigate = useNavigate();
     const [criteriaList, setCriteriaList] = useState<Criteria[]>([]);
@@ -15,6 +21,7 @@ function ModeratorCriteriaPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
+    // Загрузка критериев при монтировании компонента
     const fetchCriteria = async () => {
         try {
             const response = await api.get('/moderation/criteria');
@@ -31,9 +38,12 @@ function ModeratorCriteriaPage() {
         fetchCriteria();
     }, []);
 
+    // Удаление критерия
     const handleDelete = async (id: string) => {
         try {
+            // Переводим критерий в состояние "удаленного"
             await api.delete(`/moderation/criteria/${id}`);
+            // Обновляем список критериев
             setCriteriaList(prev => prev.filter(c => c.id !== id));
         }
         catch (err) {
@@ -41,14 +51,18 @@ function ModeratorCriteriaPage() {
         }
     };
 
+    // Добавление нового критерия
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Проверка на пустую строку
         if (!newCriteria.trim()) {
             setError('Criteria name cannot be empty');
             return;
         }
         try {
+            // Добавляем критерий
             await api.post('/moderation/criteria', {name: newCriteria});
+            // Обновляем список критериев
             setNewCriteria('');
             setError('');
             fetchCriteria();
@@ -58,12 +72,14 @@ function ModeratorCriteriaPage() {
         }
     };
 
+    // Очищение данных авторизации
     const handleLogout = () => {
         clearAuth();
         localStorage.removeItem('fullname');
         navigate('/login');
     };
 
+    // Отображение страницы
     return (
         <div
         style={{
